@@ -45,13 +45,21 @@ public class JeuGuerrier {
 		grille = new GrilleJeu(nbreJoueurs, nbrCases, nbreJetons, nbrTours, ptsVie, nomJoueurs);
 		plateau = new PlateauDeJeu(nbrCases,nbreJoueurs, nbreJetons, grille);
 		
+		int ordre=0;
 		while(true) {
+			plateau.afficherInformation2("Tour du joueur: "+grille.donnerJoueur(ordre).getNom());
+			
 			int choix = plateau.jouer();
 			if(grille.donnerPion(choix)!=null) {
 				plateau.afficherInformation("Vie du pion: " +grille.donnerPion(choix).getPtsVie());
 			}
 			else {
 				plateau.afficherInformation("Case "+choix+" a été appuyé");
+			}
+			
+			ordre++;
+			if(ordre>=nbreJoueurs) {
+				ordre=0;
 			}
 		}
 	}

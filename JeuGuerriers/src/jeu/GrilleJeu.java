@@ -2,6 +2,8 @@ package jeu;
 
 /**
  * @author Lecharlier Loïc
+ * 		   Krasowski Marcin
+ * 		   
  * 
  * Classe représentant l'état du jeu des guerriers
  * 
@@ -82,7 +84,13 @@ public class GrilleJeu {
 	 */
 	
 	public void bougerPion(int caseDepart, int caseArrivee) {
-		//TODO
+		if(donnerPion(caseArrivee)!=null) {
+			donnerPion(caseArrivee).setPtsVie(0);
+			//plus tard, implémenter bataille ici
+		}
+		
+		cases[caseArrivee]=cases[caseDepart];
+		cases[caseDepart] = null;		
 	}
 	
 	/**
@@ -94,7 +102,6 @@ public class GrilleJeu {
 	 *         false sinon
 	 */
 	public boolean estUnPionDuJoueur(int numCase, Joueur joueur) {
-		//TODO
 		return false ;
 	}
 	

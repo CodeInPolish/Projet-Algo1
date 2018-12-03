@@ -19,15 +19,15 @@ public class Joueur {
 	 * @param nom : le nom du joueur
 	 * @param nbGuerriers : le nombre de guerriers du joueur
 	 * @param ptsVie : le nombre de points de vie de départ des guerriers du joueur
-	 * @param numGuerrier : numéro du joueur
+	 * @param numJoueur : numéro du joueur
 	 */
-	public Joueur(String nom, int nbGuerriers, int ptsVie, int numGuerrier) {
+	public Joueur(String nom, int nbGuerriers, int ptsVie, int numJoueur) {
 		this.nom = nom;
 		guerriers = new Guerrier[nbGuerriers];
 		for(int i=0;i<nbGuerriers;i++) {
-			guerriers[i] = new Guerrier(numGuerrier,ptsVie,i+1);
+			guerriers[i] = new Guerrier(numJoueur,ptsVie,i+1);
 		}
-		this.numJoueur = numGuerrier;
+		this.numJoueur = numJoueur;
 	}
 	
 	/**
