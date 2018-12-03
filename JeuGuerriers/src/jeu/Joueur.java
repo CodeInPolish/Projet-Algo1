@@ -43,7 +43,7 @@ public class Joueur {
 	 * @return le numéro du joueur
 	 */
 	public int getNumJoueur() {
-		return numJoueur ;
+		return numJoueur;
 	}
 	
 	
@@ -53,8 +53,10 @@ public class Joueur {
 	 * @return le guerrier numéro i du joueur
 	 */
 	public Guerrier getGuerrier(int numGuerrier) {
-		//TODO
-		return null ;
+		if(numGuerrier>=0 && numGuerrier<guerriers.length) {
+			return guerriers[numGuerrier];
+		}
+		return null;
 	}
 	
 	/** 
@@ -62,8 +64,13 @@ public class Joueur {
 	 * @return le nombre de guerrier encore en vie du joueur
 	 */
 	public int nombreDeGuerriersEnVie() {
-		//TODO
-		return 0 ;
+		int count=0;
+		for(int i=0;i<guerriers.length;i++) {
+			if(guerriers[i].getPtsVie()>0) {
+				count++;
+			}
+		}
+		return count;
 	}
 
 }

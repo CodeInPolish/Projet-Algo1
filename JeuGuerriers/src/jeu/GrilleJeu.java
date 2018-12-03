@@ -51,8 +51,11 @@ public class GrilleJeu {
 	 * @throws IllegalArgumentException : numero invalide
 	 */
 	public Joueur donnerJoueur(int numJoueur) {
-		// TODO
-		return null ;
+		if(numJoueur > tableJoueurs.length || numJoueur < 0) {
+			throw new IllegalArgumentException();
+		}
+		
+		return tableJoueurs[numJoueur];
 	}
 
 	/**
@@ -62,7 +65,11 @@ public class GrilleJeu {
 	 *         null sinon
 	 */
 	public Guerrier donnerPion(int numCase) {
-		return null ;
+		if(numCase>0 && numCase<=cases.length) {
+			return cases[numCase-1];
+		}
+		
+		return null;
 	}
 
 	

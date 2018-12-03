@@ -44,7 +44,16 @@ public class JeuGuerrier {
 		}
 		grille = new GrilleJeu(nbreJoueurs, nbrCases, nbreJetons, nbrTours, ptsVie, nomJoueurs);
 		plateau = new PlateauDeJeu(nbrCases,nbreJoueurs, nbreJetons, grille);
-		//TODO 
+		
+		while(true) {
+			int choix = plateau.jouer();
+			if(grille.donnerPion(choix)!=null) {
+				plateau.afficherInformation("Vie du pion: " +grille.donnerPion(choix).getPtsVie());
+			}
+			else {
+				plateau.afficherInformation("Case "+choix+" a été appuyé");
+			}
+		}
 	}
 
 }
