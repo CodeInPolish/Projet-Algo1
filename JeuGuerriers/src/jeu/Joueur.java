@@ -3,6 +3,7 @@ package jeu;
 
 /**
  * @author Lecharlier Loïc
+ * 		   Krasowski Marcin
  *
  * Classe représentant un joueur du jeu des guerriers
  */
@@ -21,7 +22,12 @@ public class Joueur {
 	 * @param numGuerrier : numéro du joueur
 	 */
 	public Joueur(String nom, int nbGuerriers, int ptsVie, int numGuerrier) {
-		//TODO
+		this.nom = nom;
+		guerriers = new Guerrier[nbGuerriers];
+		for(int i=0;i<nbGuerriers;i++) {
+			guerriers[i] = new Guerrier(numGuerrier,ptsVie,i+1);
+		}
+		this.numJoueur = numGuerrier;
 	}
 	
 	/**

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 /**
  * @author Lecharlier Loic
+ * 		   Krasowski Marcin
  * 
  *         Classe d'exécution du jeu
  *
