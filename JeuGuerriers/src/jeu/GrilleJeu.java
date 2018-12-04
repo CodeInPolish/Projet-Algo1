@@ -103,7 +103,17 @@ public class GrilleJeu {
 	 *         false sinon
 	 */
 	public boolean estUnPionDuJoueur(int numCase, Joueur joueur) {
-		return false ;
+		Guerrier pion = donnerPion(numCase);
+		
+		if(pion==null) {
+			return false;
+		}
+		
+		if(pion.getNumJoueur()==joueur.getNumJoueur()) {
+			return true;
+		}
+		
+		return false;
 	}
 	
 	/**
@@ -127,8 +137,20 @@ public class GrilleJeu {
 	 * @return un tableau de pion repr�sentant le classement des pions selon les crit�res ci-dessus
 	 */
 	public Guerrier[] classerGuerriers() {
-		//TODO
-		return null ;
+		int guerriersEnVie = 0;
+		for(int i=0;i<tableJoueurs.length;i++) {
+			guerriersEnVie += tableJoueurs[i].nombreDeGuerriersEnVie();
+		}
+		Guerrier[] buffer = new Guerrier[guerriersEnVie];
+		int index=0;
+		for(int i=(cases.length-1);i>=0;i--) {
+			Guerrier elem = donnerPion(i);
+			if(elem!=null) {
+				buffer[index] = elem;
+				index++;
+			}
+		}
+		return buffer;
 	}
 
 }
