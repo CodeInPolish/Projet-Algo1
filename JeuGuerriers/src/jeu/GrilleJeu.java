@@ -84,14 +84,14 @@ public class GrilleJeu {
 	 */
 	
 	public void bougerPion(int caseDepart, int caseArrivee) {
-		Guerrier pion = donnerPion(caseArrivee);
+		Guerrier pion = donnerPion(caseArrivee-1);
 		if(pion!=null) {
 			pion.setPtsVie(0);
 			//plus tard, impl�menter bataille ici
 		}
 		
-		cases[caseArrivee]=cases[caseDepart];
-		cases[caseDepart] = null;		
+		cases[caseArrivee-1]=cases[caseDepart-1];
+		cases[caseDepart-1] = null;		
 	}
 	
 	/**
