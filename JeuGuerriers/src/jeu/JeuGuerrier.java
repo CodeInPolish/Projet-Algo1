@@ -7,16 +7,16 @@ import java.util.ArrayList;
  * @author Lecharlier Loic
  * 		   Krasowski Marcin
  * 
- *         Classe d'exécution du jeu
+ *         Classe d'exï¿½cution du jeu
  *
  */
 
 public class JeuGuerrier {
 
 	private static Scanner scanner = new Scanner(System.in);
-	private static GrilleJeu grille; // gestion des données du jeu
+	private static GrilleJeu grille; // gestion des donnï¿½es du jeu
 	private static PlateauDeJeu plateau; // panneau graphique du jeu
-	private static De de = new DeJeu();
+	private static De de = new DeTests();
 
 	public static void main(String[] args) {
 
@@ -26,7 +26,7 @@ public class JeuGuerrier {
 		// A ne pas modifier
 
 		System.out.print("Entrez le nombre de cases : ");
-		int nbrCases = UtilitairesJeux.lireEntierPositif("Le nombre de cases doit être pair");
+		int nbrCases = UtilitairesJeux.lireEntierPositif("Le nombre de cases doit ï¿½tre pair");
 		System.out.print("Entrez le nombre de tours : ");
 		int nbrTours = UtilitairesJeux.lireEntierPositif("Le nombre de tours est de minimum 1");
 		System.out.print("Entrez le nombre de joueurs : ");
@@ -54,8 +54,12 @@ public class JeuGuerrier {
 				plateau.afficherInformation("Vie du pion: " +grille.donnerPion(choix).getPtsVie());
 			}
 			else {
-				plateau.afficherInformation("Case "+choix+" a été appuyé");
+				plateau.afficherInformation("Case "+choix+" a Ã©tÃ© appuyÃ©");
 			}
+			
+			grille.bougerPion(choix, choix+de.lancer());
+			
+			plateau.actualiser(grille);
 			
 			ordre++;
 			if(ordre>=nbreJoueurs) {
