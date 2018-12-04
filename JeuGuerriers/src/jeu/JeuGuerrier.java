@@ -59,7 +59,7 @@ public class JeuGuerrier {
 			
 			plateau.afficherInformation("Case "+choix+" a été appuyé");
 			
-			grille.bougerPion(choix, choix+jetDe);
+			checkGuerrierJoueur(ordre, choix, jetDe);
 			
 			plateau.actualiser(grille);
 			plateau.afficherGuerriers(grille.classerGuerriers());
@@ -67,6 +67,14 @@ public class JeuGuerrier {
 			if(ordre>=nbreJoueurs) {
 				ordre=0;
 			}
+		}
+	}
+	
+	private static void checkGuerrierJoueur(int joueur, int caseSelect, int jetDe) {
+		Joueur player = grille.donnerJoueur(joueur);
+		
+		if(grille.estUnPionDuJoueur(caseSelect, player)) {
+			grille.bougerPion(caseSelect, caseSelect+jetDe);
 		}
 	}
 
