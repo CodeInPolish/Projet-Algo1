@@ -57,7 +57,7 @@ public class GrilleJeu {
 			throw new IllegalArgumentException();
 		}
 		
-		return tableJoueurs[numJoueur];
+		return tableJoueurs[numJoueur-1];
 	}
 
 	/**
@@ -170,6 +170,26 @@ public class GrilleJeu {
 			}
 		}
 		return buffer;
+	}
+	
+	public Joueur checkWin() {
+		Guerrier[] guerriersEnVie = classerGuerriers();
+		int joueursPionsEnVie = 0;
+		int joueurEnVie = 0;
+		for(int i=0;i<tableJoueurs.length;i++) {
+			if(tableJoueurs[i].nombreDeGuerriersEnVie()>0) {
+				joueursPionsEnVie++;
+				joueurEnVie=i;
+			}
+		}
+		if(joueursPionsEnVie==1) {
+			return donnerJoueur(joueurEnVie);
+		}
+		//si tableau trié, le meilleur pion sera en première position
+		if(guerriersEnVie[0].getNombreDeTours()==nombreDeTours) {
+			return donnerJoueur(guerriersEnVie[0].getNumJoueur());
+		}
+		return null;
 	}
 
 }

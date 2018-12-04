@@ -49,8 +49,8 @@ public class JeuGuerrier {
 		plateau = new PlateauDeJeu(nbrCases,nbreJoueurs, nbreJetons, grille);
 		plateau.afficherGuerriers(grille.classerGuerriers());
 		
-		int ordre=0;
-		while(true) {
+		int ordre=1;
+		while(grille.checkWin()==null) {
 			int jetDe = de.lancer();
 			plateau.afficherResultatDe(jetDe);
 			plateau.afficherInformation2("Tour du joueur: "+grille.donnerJoueur(ordre).getNom());
@@ -64,10 +64,15 @@ public class JeuGuerrier {
 			plateau.actualiser(grille);
 			plateau.afficherGuerriers(grille.classerGuerriers());
 			ordre++;
-			if(ordre>=nbreJoueurs) {
-				ordre=0;
+			if(ordre>nbreJoueurs) {
+				ordre=1;
 			}
 		}
+		
+		//afficher message win
+		plateau.actualiser(grille);
+		plateau.afficherGagnant(grille.checkWin());
+		
 	}
 	
 	private static void checkGuerrierJoueur(int joueur, int caseSelect, int jetDe) {
