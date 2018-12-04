@@ -2,30 +2,30 @@ package jeu;
 
 
 /**
- * @author Lecharlier Loïc
+ * @author Lecharlier Loï¿½c
  * 		   Krasowski Marcin
  *
- * Classe représentant un joueur du jeu des guerriers
+ * Classe reprï¿½sentant un joueur du jeu des guerriers
  */
 
 public class Joueur {
 	
 	private Guerrier[] guerriers ; // tableau contenant les guerriers du joueur
-	private int numJoueur ; // numéro du joueur
+	private int numJoueur ; // numï¿½ro du joueur
 	private String nom; //nom du joueur
 	
 	/**
-	 * Crée un joueur du jeu des guerriers 
+	 * Crï¿½e un joueur du jeu des guerriers 
 	 * @param nom : le nom du joueur
 	 * @param nbGuerriers : le nombre de guerriers du joueur
-	 * @param ptsVie : le nombre de points de vie de départ des guerriers du joueur
-	 * @param numJoueur : numéro du joueur
+	 * @param ptsVie : le nombre de points de vie de dï¿½part des guerriers du joueur
+	 * @param numJoueur : numï¿½ro du joueur
 	 */
 	public Joueur(String nom, int nbGuerriers, int ptsVie, int numJoueur) {
 		this.nom = nom;
-		guerriers = new Guerrier[nbGuerriers];
-		for(int i=0;i<nbGuerriers;i++) {
-			guerriers[i] = new Guerrier(numJoueur,ptsVie,i+1);
+		guerriers = new Guerrier[nbGuerriers+1];
+		for(int i=1;i<nbGuerriers+1;i++) {
+			guerriers[i] = new Guerrier(numJoueur,ptsVie,i);
 		}
 		this.numJoueur = numJoueur;
 	}
@@ -39,8 +39,8 @@ public class Joueur {
 	}
 	
 	/**
-	 * renvoie le numéro du joueur
-	 * @return le numéro du joueur
+	 * renvoie le numï¿½ro du joueur
+	 * @return le numï¿½ro du joueur
 	 */
 	public int getNumJoueur() {
 		return numJoueur;
@@ -48,24 +48,24 @@ public class Joueur {
 	
 	
 	/**
-	 * Renvoie le guerrier numéro i du joueur
-	 * @param numGuerrier : le numéro du joueur
-	 * @return le guerrier numéro i du joueur
+	 * Renvoie le guerrier numï¿½ro i du joueur
+	 * @param numGuerrier : le numï¿½ro du joueur
+	 * @return le guerrier numï¿½ro i du joueur
 	 */
 	public Guerrier getGuerrier(int numGuerrier) {
-		if(numGuerrier>=0 && numGuerrier<guerriers.length) {
+		if(numGuerrier>0 && numGuerrier<guerriers.length) {
 			return guerriers[numGuerrier];
 		}
 		return null;
 	}
 	
 	/** 
-	 * Détermine le nombre de guerrier encore en vie du joueur
+	 * Dï¿½termine le nombre de guerrier encore en vie du joueur
 	 * @return le nombre de guerrier encore en vie du joueur
 	 */
 	public int nombreDeGuerriersEnVie() {
 		int count=0;
-		for(int i=0;i<guerriers.length;i++) {
+		for(int i=1;i<guerriers.length;i++) {
 			if(guerriers[i].getPtsVie()>0) {
 				count++;
 			}

@@ -30,14 +30,14 @@ public class GrilleJeu {
 	 */
 	
 	public GrilleJeu(int nombreJoueurs, int nombreDeCases, int nombreDeGuerriersParJoueur, int nombreDeTours,int ptsVieDeDepart,String[] nomDesJoueurs) {
-		tableJoueurs = new Joueur[nombreJoueurs];
-		for(int i=0;i<nombreJoueurs;i++) {
-			tableJoueurs[i] = new Joueur(nomDesJoueurs[i],nombreDeGuerriersParJoueur,ptsVieDeDepart,i+1);
+		tableJoueurs = new Joueur[nombreJoueurs+1];
+		for(int i=1;i<nombreJoueurs+1;i++) {
+			tableJoueurs[i] = new Joueur(nomDesJoueurs[i-1],nombreDeGuerriersParJoueur,ptsVieDeDepart,i);
 		}
-		cases = new Guerrier[nombreDeCases];
-		int index=0;
-		for(int i=0;i<nombreDeGuerriersParJoueur;i++) {
-			for(int j=0;j<nombreJoueurs;j++) {
+		cases = new Guerrier[nombreDeCases+1];
+		int index=1;
+		for(int i=1;i<nombreDeGuerriersParJoueur+1;i++) {
+			for(int j=1;j<nombreJoueurs+1;j++) {
 				cases[index] = tableJoueurs[j].getGuerrier(i);
 				index++;
 			}
@@ -57,7 +57,7 @@ public class GrilleJeu {
 			throw new IllegalArgumentException();
 		}
 		
-		return tableJoueurs[numJoueur-1];
+		return tableJoueurs[numJoueur];
 	}
 
 	/**
@@ -67,8 +67,8 @@ public class GrilleJeu {
 	 *         null sinon
 	 */
 	public Guerrier donnerPion(int numCase) {
-		if(numCase>0 && numCase<=cases.length) {
-			return cases[numCase-1];
+		if(numCase>0 && numCase<cases.length) {
+			return cases[numCase];
 		}
 		
 		return null;
@@ -88,9 +88,9 @@ public class GrilleJeu {
 		boolean crossedFinish=false;
 		Guerrier pionDeplace = donnerPion(caseDepart);
 		if(pionDeplace!=null) {
-			if(caseArrivee>cases.length) {
+			if(caseArrivee>cases.length-1) {
 				crossedFinish=true;
-				finish = caseArrivee-cases.length;
+				finish = caseArrivee-cases.length+1;
 			}
 			else {
 				finish = caseArrivee;
@@ -116,7 +116,7 @@ public class GrilleJeu {
 	}
 	
 	private void pushPion(Guerrier elem, int location) {
-		cases[location-1] = elem;
+		cases[location] = elem;
 	}
 	
 	/**
@@ -147,7 +147,7 @@ public class GrilleJeu {
 	 */
 	
 	public void supprimerPion(int numCase) {
-		cases[numCase-1] = null;
+		cases[numCase] = null;
 		
 	}
 	
@@ -157,8 +157,8 @@ public class GrilleJeu {
 	 */
 	public Guerrier[] classerGuerriers() {
 		int guerriersEnVie = 0;
-		for(int i=0;i<tableJoueurs.length;i++) {
-			guerriersEnVie = guerriersEnVie + tableJoueurs[i].nombreDeGuerriersEnVie();
+		for(int i=1;i<tableJoueurs.length;i++) {
+			guerriersEnVie += tableJoueurs[i].nombreDeGuerriersEnVie();
 		}
 		Guerrier[] buffer = new Guerrier[guerriersEnVie];
 		int index=0;
@@ -176,7 +176,7 @@ public class GrilleJeu {
 		Guerrier[] guerriersEnVie = classerGuerriers();
 		int joueursPionsEnVie = 0;
 		int joueurEnVie = 0;
-		for(int i=0;i<tableJoueurs.length;i++) {
+		for(int i=1;i<tableJoueurs.length;i++) {
 			if(tableJoueurs[i].nombreDeGuerriersEnVie()>0) {
 				joueursPionsEnVie++;
 				joueurEnVie=i;
@@ -186,8 +186,8 @@ public class GrilleJeu {
 			return donnerJoueur(joueurEnVie);
 		}
 		//si tableau trié, le meilleur pion sera en première position
-		if(guerriersEnVie[0].getNombreDeTours()==nombreDeTours) {
-			return donnerJoueur(guerriersEnVie[0].getNumJoueur());
+		if(guerriersEnVie[1].getNombreDeTours()==nombreDeTours) {
+			return donnerJoueur(guerriersEnVie[1].getNumJoueur());
 		}
 		return null;
 	}
