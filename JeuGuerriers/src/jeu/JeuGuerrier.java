@@ -24,7 +24,7 @@ public class JeuGuerrier {
 
 		// configuration du jeu
 		// A ne pas modifier
-
+		/*
 		System.out.print("Entrez le nombre de cases : ");
 		int nbrCases = UtilitairesJeux.lireEntierPositif("Le nombre de cases doit �tre pair");
 		System.out.print("Entrez le nombre de tours : ");
@@ -42,25 +42,27 @@ public class JeuGuerrier {
 			System.out.print("Entrez le nom du joueur " + numJoueur + " : ");
 			nomJoueurs[numJoueur - 1] = UtilitairesJeux.lireStringNonVide("Le nom doit contenir au moins une lettre");
 		}
+		*/
+		int nbrCases=30,nbrTours=2,nbreJoueurs=2,nbreJetons=5,ptsVie=5;
+		String[] nomJoueurs = new String[] {"muu","jee"};
 		grille = new GrilleJeu(nbreJoueurs, nbrCases, nbreJetons, nbrTours, ptsVie, nomJoueurs);
 		plateau = new PlateauDeJeu(nbrCases,nbreJoueurs, nbreJetons, grille);
+		plateau.afficherGuerriers(grille.classerGuerriers());
 		
 		int ordre=0;
 		while(true) {
+			int jetDe = de.lancer();
+			plateau.afficherResultatDe(jetDe);
 			plateau.afficherInformation2("Tour du joueur: "+grille.donnerJoueur(ordre).getNom());
 			
 			int choix = plateau.jouer();
-			if(grille.donnerPion(choix)!=null) {
-				plateau.afficherInformation("Vie du pion: " +grille.donnerPion(choix).getPtsVie());
-			}
-			else {
-				plateau.afficherInformation("Case "+choix+" a été appuyé");
-			}
 			
-			grille.bougerPion(choix, choix+de.lancer());
+			plateau.afficherInformation("Case "+choix+" a été appuyé");
+			
+			grille.bougerPion(choix, choix+jetDe);
 			
 			plateau.actualiser(grille);
-			
+			plateau.afficherGuerriers(grille.classerGuerriers());
 			ordre++;
 			if(ordre>=nbreJoueurs) {
 				ordre=0;
