@@ -193,12 +193,22 @@ public class GrilleJeu {
 			guerriersEnVie += tableJoueurs[i].nombreDeGuerriersEnVie();
 		}
 		Guerrier[] buffer = new Guerrier[guerriersEnVie];
-		int index=0;
-		for(int i=cases.length;i>0;i--) {
+		int add_no=0;
+		for(int i=1;i<cases.length;i++) {
 			Guerrier elem = donnerPion(i);
 			if(elem!=null && elem.getPtsVie()>0) {
-				buffer[index] = elem;
-				index++;
+				int j=0;
+				while(j<add_no) {
+					if(buffer[j].getNombreDeTours()<=elem.getNombreDeTours()) {
+						break;
+					}
+					j++;
+				}
+				for(int mov=add_no;mov>j;mov--) {
+					buffer[mov] = buffer[mov-1];
+				}
+				buffer[j] = elem;
+				add_no++;
 			}
 		}
 		return buffer;

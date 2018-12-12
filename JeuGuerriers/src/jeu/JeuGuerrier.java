@@ -37,7 +37,7 @@ public class JeuGuerrier {
 		int ptsVie = UtilitairesJeux.lireEntierPositif("Le nombre de points de vie est de minimum 1");
 		
 		while(nbreJetons>nbrCases){
-			System.out.print("Le nombre de guerriers doit etre inférieur à "+nbrCases+".");
+			System.out.print("Le nombre de guerriers doit etre infï¿½rieur ï¿½ "+nbrCases+".");
 			nbreJetons = UtilitairesJeux.lireEntierPositif("Le nombre de guerriers est de minimum 1");
 		}
 
@@ -53,7 +53,7 @@ public class JeuGuerrier {
 		plateau.afficherGuerriers(grille.classerGuerriers());
 		
 		int ordre=1;
-		while(grille.checkWin()==null) {
+		while(checkWin()==null) {
 			int jetDe = de.lancer();
 			plateau.afficherResultatDe(jetDe);
 			plateau.afficherJoueur(grille.donnerJoueur(ordre));
@@ -71,7 +71,7 @@ public class JeuGuerrier {
 		
 		//afficher message win
 		plateau.actualiser(grille);
-		plateau.afficherGagnant(grille.checkWin());
+		plateau.afficherGagnant(checkWin());
 		
 	}
 	
@@ -84,6 +84,10 @@ public class JeuGuerrier {
 		else {
 			plateau.afficherInformation("Tour perdu!");
 		}
+	}
+	
+	private static Joueur checkWin() {
+		return null;
 	}
 
 }
