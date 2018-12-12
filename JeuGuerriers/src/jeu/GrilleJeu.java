@@ -84,71 +84,12 @@ public class GrilleJeu {
 	 */
 	
 	public void bougerPion(int caseDepart, int caseArrivee) {
-		int finish=0;
-		boolean crossedFinish=false;
-		Guerrier pionDeplace = donnerPion(caseDepart);
-		if(pionDeplace!=null) {
-			if(caseArrivee>cases.length-1) {
-				crossedFinish=true;
-				finish = caseArrivee-cases.length+1;
-			}
-			else {
-				finish = caseArrivee;
-			}
-			
-			Guerrier pionArrivee = donnerPion(finish);
-			
-			if(pionArrivee != null) {
-				bougerPionRegles(pionDeplace,pionArrivee,caseDepart,finish,crossedFinish);
-			}
-			else {
-				if(crossedFinish) {
-					pionDeplace.ajouterUnTour();
-				}
-				
-				pushPion(pionDeplace,finish);
-				supprimerPion(caseDepart);
-			}
-		}
+		cases[caseArrivee] = cases[caseDepart];
+		cases[caseDepart]=null;
 	}
 	
-	private void bougerPionRegles(Guerrier pionDeplace, Guerrier pionArrivee, int caseDepart, int finish, boolean crossedFinish) {
-		De jet = new DeTests();
-		int degatsPion1 = jet.lancer();
-		int degatsPion2 = jet.lancer();
-		
-		pionArrivee.setPtsVie(pionArrivee.getPtsVie()-degatsPion1);
-		pionDeplace.setPtsVie(pionDeplace.getPtsVie()-degatsPion2);
-		
-		if(pionDeplace.getPtsVie() <= 0 && pionArrivee.getPtsVie() <= 0) {
-			supprimerPion(caseDepart);
-			supprimerPion(finish);
-		}
-		else if(pionDeplace.getPtsVie() <= 0) {
-			supprimerPion(caseDepart);
-		}
-		else if(pionArrivee.getPtsVie() <= 0) {					
-			if(crossedFinish) {
-				pionDeplace.ajouterUnTour();
-			}
-			
-			pushPion(pionDeplace,finish);
-			supprimerPion(caseDepart);
-		}
-		else if(degatsPion1>degatsPion2) {
-			supprimerPion(caseDepart);
-			int arrivee=donnerCaseVide(finish);
-			
-			if(arrivee>0) {
-				pushPion(pionDeplace,arrivee);
-				if(arrivee<finish) {
-					pionDeplace.ajouterUnTour();
-				}
-			}	
-		}
-	}
 	
-	private void pushPion(Guerrier elem, int location) {
+	public void pushPion(Guerrier elem, int location) {
 		cases[location] = elem;
 	}
 	
@@ -214,27 +155,7 @@ public class GrilleJeu {
 		return buffer;
 	}
 	
-	public Joueur checkWin() {
-		Guerrier[] guerriersEnVie = classerGuerriers();
-		int joueursPionsEnVie = 0;
-		int joueurEnVie = 0;
-		for(int i=1;i<tableJoueurs.length;i++) {
-			if(tableJoueurs[i].nombreDeGuerriersEnVie()>0) {
-				joueursPionsEnVie++;
-				joueurEnVie=i;
-			}
-		}
-		if(joueursPionsEnVie==1) {
-			return donnerJoueur(joueurEnVie);
-		}
-		//si tableau trié, le meilleur pion sera en première position
-		if(guerriersEnVie[1].getNombreDeTours()==nombreDeTours) {
-			return donnerJoueur(guerriersEnVie[1].getNumJoueur());
-		}
-		return null;
-	}
-	
-	private int donnerCaseVide(int start) {
+	public int donnerCaseVide(int start) {
 		for(int i=start;i<cases.length;i++) {
 			if(cases[i]==null) {
 				return i;

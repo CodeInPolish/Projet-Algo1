@@ -16,7 +16,7 @@ public class JeuGuerrier {
 	private static Scanner scanner = new Scanner(System.in);
 	private static GrilleJeu grille; // gestion des donn�es du jeu
 	private static PlateauDeJeu plateau; // panneau graphique du jeu
-	private static De de = new DeTests();
+	private static De de = new DeJeu();
 
 	public static void main(String[] args) {
 
@@ -52,41 +52,140 @@ public class JeuGuerrier {
 		plateau = new PlateauDeJeu(nbrCases,nbreJoueurs, nbreJetons, grille);
 		plateau.afficherGuerriers(grille.classerGuerriers());
 		
-		int ordre=1;
-		while(checkWin()==null) {
-			int jetDe = de.lancer();
-			plateau.afficherResultatDe(jetDe);
-			plateau.afficherJoueur(grille.donnerJoueur(ordre));
-			
-			int choix = plateau.jouer();			
-			checkGuerrierJoueur(ordre, choix, jetDe);
-			
-			plateau.actualiser(grille);
-			plateau.afficherGuerriers(grille.classerGuerriers());
-			ordre++;
-			if(ordre>nbreJoueurs) {
-				ordre=1;
-			}
+		int playerIndex=0;
+		int[] playersInGame = new int[nbreJoueurs];
+		for(int i=0;i<nbreJoueurs;i++) {
+			playersInGame[i] = i+1;
 		}
 		
-		//afficher message win
-		plateau.actualiser(grille);
-		plateau.afficherGagnant(checkWin());
+		Joueur winner = checkWin(nbrTours, nbreJoueurs, grille.classerGuerriers());
+		
+		while(winner==null) {
+			
+			if(playersInGame[playerIndex]>0) {
+				plateau.afficherJoueur(grille.donnerJoueur(playersInGame[playerIndex]));
+				int jetDe = de.lancer();
+				plateau.afficherResultatDe(jetDe);
+				int choix = plateau.jouer();			
+				checkGuerrierJoueur(playersInGame[playerIndex], choix, jetDe, nbrCases);
+				
+			}
+			
+			plateau.actualiser(grille);
+			Guerrier[] classementGuerrier = grille.classerGuerriers();
+			plateau.afficherGuerriers(classementGuerrier);
+			winner = checkWin(nbrTours, nbreJoueurs, classementGuerrier);
+			
+			do{
+				playerIndex++;
+				if(playerIndex>nbreJoueurs-1) {
+					playerIndex=0;
+				}
+			}while(playersInGame[playerIndex]<0);
+		}
+		
+		plateau.afficherGagnant(winner);
+		plateau.afficherFinDuJeu();
 		
 	}
 	
-	private static void checkGuerrierJoueur(int joueur, int caseSelect, int jetDe) {
+	private static void checkGuerrierJoueur(int joueur, int caseSelect, int jetDe, int nbrCases) {
 		Joueur player = grille.donnerJoueur(joueur);
 		
 		if(grille.estUnPionDuJoueur(caseSelect, player)) {
-			grille.bougerPion(caseSelect, caseSelect+jetDe);
+			String message = generalLogic(caseSelect, jetDe, nbrCases);
+			plateau.afficherInformation(message);
 		}
 		else {
 			plateau.afficherInformation("Tour perdu!");
 		}
 	}
 	
-	private static Joueur checkWin() {
+	private static String generalLogic(int caseSelect, int jetDe, int nbrCases) {
+		String message = "";
+		int caseArrivee=caseSelect+jetDe;
+		boolean crossedFinish=false;
+		if(caseArrivee>nbrCases) {
+			caseArrivee = caseArrivee-nbrCases;
+			crossedFinish=true;
+		}
+		Guerrier pionDeplace = grille.donnerPion(caseSelect);
+		Guerrier pionArrivee = grille.donnerPion(caseArrivee);
+		if(pionArrivee==null) {
+			if(crossedFinish) {
+				grille.donnerPion(caseSelect).ajouterUnTour();
+			}
+			grille.bougerPion(caseSelect, caseArrivee);
+		}
+		else{
+			message=fight(pionDeplace, pionArrivee, caseSelect, caseArrivee, crossedFinish);
+		}
+		
+		return message;
+	}
+	
+	private static String fight(Guerrier pionDeplace, Guerrier pionArrivee, int caseDepart, int caseArrivee, boolean crossedFinish) {
+		String message="";
+		int degatsPion1 = de.lancer();
+		int degatsPion2 = de.lancer();
+		
+		pionArrivee.setPtsVie(pionArrivee.getPtsVie()-degatsPion1);
+		pionDeplace.setPtsVie(pionDeplace.getPtsVie()-degatsPion2);
+		
+		if(pionDeplace.getPtsVie() <= 0 && pionArrivee.getPtsVie() <= 0) {
+			grille.supprimerPion(caseDepart);
+			grille.supprimerPion(caseArrivee);
+			message = "Les deux guerriers sont morts!";
+		}
+		else if(pionDeplace.getPtsVie() <= 0) {
+			grille.supprimerPion(caseDepart);
+			message = "Votre guerrier est mort!";
+		}
+		else if(pionArrivee.getPtsVie() <= 0) {					
+			if(crossedFinish) {
+				pionDeplace.ajouterUnTour();
+			}
+			
+			grille.pushPion(pionDeplace,caseArrivee);
+			grille.supprimerPion(caseDepart);
+			message = "Le guerrier attaqué est mort!";
+		}
+		else if(degatsPion1>degatsPion2) {
+			message = "Votre guerrier a gagné la bataille!";
+			grille.supprimerPion(caseDepart);
+			int arrivee=grille.donnerCaseVide(caseArrivee);
+			
+			if(crossedFinish) {
+				pionDeplace.ajouterUnTour();
+			}
+			
+			grille.pushPion(pionDeplace,arrivee);
+			if(arrivee<caseArrivee) {
+				pionDeplace.ajouterUnTour();
+			}
+		}
+		else {
+			message = "Le guerrier a infligé: "+degatsPion1+" et a subi: "+degatsPion2;
+		}
+		return message;
+	}
+	
+	private static Joueur checkWin(int nbTours, int nbJoueurs, Guerrier[] tableauClasse) {
+		int joueursPionsEnVie = 0;
+		int joueurEnVie = 0;
+		for(int i=1;i<nbJoueurs+1;i++) {
+			if(grille.donnerJoueur(i).nombreDeGuerriersEnVie()>0) {
+				joueursPionsEnVie++;
+				joueurEnVie=i;
+			}
+		}
+		if(joueursPionsEnVie==1) {
+			return grille.donnerJoueur(joueurEnVie);
+		}
+		//si tableau trié, le meilleur pion sera en première position
+		if(tableauClasse[0].getNombreDeTours()==nbTours) {
+			return grille.donnerJoueur(tableauClasse[0].getNumJoueur());
+		}
 		return null;
 	}
 
