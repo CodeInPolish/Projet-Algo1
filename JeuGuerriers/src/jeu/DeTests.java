@@ -7,7 +7,7 @@ package jeu;
  */
 public class DeTests implements De {
 	int lanceSuivant ;
-	int[] lances = {1,1,2,2,4,6} ;
+	int[] lances = {2,1,1,2,2,4,6} ;
 	public DeTests() {
 		lanceSuivant = 0 ;
 	}

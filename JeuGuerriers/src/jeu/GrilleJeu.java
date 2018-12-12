@@ -99,12 +99,35 @@ public class GrilleJeu {
 			Guerrier pionArrivee = donnerPion(finish);
 			
 			if(pionArrivee != null) {
-				//bataille
-				pionArrivee.setPtsVie(0);
+				bougerPionRegles(pionDeplace,pionArrivee,caseDepart,finish,crossedFinish);
 			}
-			
+			else {
+				if(crossedFinish) {
+					pionDeplace.ajouterUnTour();
+				}
+				
+				pushPion(pionDeplace,finish);
+				supprimerPion(caseDepart);
+			}
+		}
+	}
+	
+	private void bougerPionRegles(Guerrier pionDeplace, Guerrier pionArrivee, int caseDepart, int finish, boolean crossedFinish) {
+		De jet = new DeTests();
+		int degatsPion1 = jet.lancer();
+		int degatsPion2 = jet.lancer();
+		
+		pionArrivee.setPtsVie(pionArrivee.getPtsVie()-degatsPion1);
+		pionDeplace.setPtsVie(pionDeplace.getPtsVie()-degatsPion2);
+		
+		if(pionDeplace.getPtsVie() <= 0 && pionArrivee.getPtsVie() <= 0) {
+			supprimerPion(caseDepart);
 			supprimerPion(finish);
-			
+		}
+		else if(pionDeplace.getPtsVie() <= 0) {
+			supprimerPion(caseDepart);
+		}
+		else if(pionArrivee.getPtsVie() <= 0) {					
 			if(crossedFinish) {
 				pionDeplace.ajouterUnTour();
 			}
@@ -112,7 +135,17 @@ public class GrilleJeu {
 			pushPion(pionDeplace,finish);
 			supprimerPion(caseDepart);
 		}
+		else if(degatsPion1>degatsPion2) {
+			supprimerPion(caseDepart);
+			int arrivee=donnerCaseVide(finish);
 			
+			if(arrivee>0) {
+				pushPion(pionDeplace,arrivee);
+				if(arrivee<finish) {
+					pionDeplace.ajouterUnTour();
+				}
+			}	
+		}
 	}
 	
 	private void pushPion(Guerrier elem, int location) {
@@ -148,7 +181,6 @@ public class GrilleJeu {
 	
 	public void supprimerPion(int numCase) {
 		cases[numCase] = null;
-		
 	}
 	
 	/**
@@ -190,6 +222,22 @@ public class GrilleJeu {
 			return donnerJoueur(guerriersEnVie[1].getNumJoueur());
 		}
 		return null;
+	}
+	
+	private int donnerCaseVide(int start) {
+		for(int i=start;i<cases.length;i++) {
+			if(cases[i]==null) {
+				return i;
+			}
+		}
+		
+		for(int i=1;i<start;i++) {
+			if(cases[i]==null) {
+				return i;
+			}
+		}
+		
+		return -1;
 	}
 
 }

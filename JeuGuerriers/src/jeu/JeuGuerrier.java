@@ -24,7 +24,7 @@ public class JeuGuerrier {
 
 		// configuration du jeu
 		// A ne pas modifier
-		/*
+		
 		System.out.print("Entrez le nombre de cases : ");
 		int nbrCases = UtilitairesJeux.lireEntierPositif("Le nombre de cases doit ÔøΩtre pair");
 		System.out.print("Entrez le nombre de tours : ");
@@ -35,6 +35,11 @@ public class JeuGuerrier {
 		int nbreJetons = UtilitairesJeux.lireEntierPositif("Le nombre de guerriers est de minimum 1");
 		System.out.print("Entrez le nombre de points de vie des guerriers : ");
 		int ptsVie = UtilitairesJeux.lireEntierPositif("Le nombre de points de vie est de minimum 1");
+		
+		while(nbreJetons>nbrCases){
+			System.out.print("Le nombre de guerriers doit etre infÈrieur ‡ "+nbrCases+".");
+			nbreJetons = UtilitairesJeux.lireEntierPositif("Le nombre de guerriers est de minimum 1");
+		}
 
 		String[] nomJoueurs = new String[nbreJoueurs];
 		System.out.println("Entrez les noms des joueurs selon l'ordre du jeu : ");
@@ -42,9 +47,7 @@ public class JeuGuerrier {
 			System.out.print("Entrez le nom du joueur " + numJoueur + " : ");
 			nomJoueurs[numJoueur - 1] = UtilitairesJeux.lireStringNonVide("Le nom doit contenir au moins une lettre");
 		}
-		*/
-		int nbrCases=30,nbrTours=2,nbreJoueurs=2,nbreJetons=5,ptsVie=5;
-		String[] nomJoueurs = new String[] {"muu","jee"};
+		
 		grille = new GrilleJeu(nbreJoueurs, nbrCases, nbreJetons, nbrTours, ptsVie, nomJoueurs);
 		plateau = new PlateauDeJeu(nbrCases,nbreJoueurs, nbreJetons, grille);
 		plateau.afficherGuerriers(grille.classerGuerriers());
@@ -53,12 +56,9 @@ public class JeuGuerrier {
 		while(grille.checkWin()==null) {
 			int jetDe = de.lancer();
 			plateau.afficherResultatDe(jetDe);
-			plateau.afficherInformation2("Tour du joueur: "+grille.donnerJoueur(ordre).getNom());
+			plateau.afficherJoueur(grille.donnerJoueur(ordre));
 			
-			int choix = plateau.jouer();
-			
-			plateau.afficherInformation("Case "+choix+" a √©t√© appuy√©");
-			
+			int choix = plateau.jouer();			
 			checkGuerrierJoueur(ordre, choix, jetDe);
 			
 			plateau.actualiser(grille);
@@ -80,6 +80,9 @@ public class JeuGuerrier {
 		
 		if(grille.estUnPionDuJoueur(caseSelect, player)) {
 			grille.bougerPion(caseSelect, caseSelect+jetDe);
+		}
+		else {
+			plateau.afficherInformation("Tour perdu!");
 		}
 	}
 
