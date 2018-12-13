@@ -67,7 +67,7 @@ public class GrilleJeu {
 	 *         null sinon
 	 */
 	public Guerrier donnerPion(int numCase) {
-		if(numCase>0 && numCase<cases.length) {
+		if(numCase>0 && numCase<cases.length+1) {
 			return cases[numCase-1];
 		}
 		
@@ -141,7 +141,7 @@ public class GrilleJeu {
 		Guerrier[] buffer = new Guerrier[guerriersEnVie];
 		int add_no=0;
 		for(int i=0;i<cases.length;i++) {
-			Guerrier elem = donnerPion(i);
+			Guerrier elem = cases[i];
 			if(elem!=null && elem.getPtsVie()>0) {
 				int j=0;
 				while(j<add_no) {
