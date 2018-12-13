@@ -2,7 +2,7 @@ package jeu;
 
 
 /**
- * @author Lecharlier Lo�c
+ * @author Kambayi Dimitri
  * 		   Krasowski Marcin
  *
  * Classe repr�sentant un joueur du jeu des guerriers
@@ -23,9 +23,9 @@ public class Joueur {
 	 */
 	public Joueur(String nom, int nbGuerriers, int ptsVie, int numJoueur) {
 		this.nom = nom;
-		guerriers = new Guerrier[nbGuerriers+1];
-		for(int i=1;i<nbGuerriers+1;i++) {
-			guerriers[i] = new Guerrier(numJoueur,ptsVie,i);
+		this.guerriers = new Guerrier[nbGuerriers];
+		for(int i=0;i<nbGuerriers;i++) {
+			guerriers[i] = new Guerrier(numJoueur,ptsVie,i+1);
 		}
 		this.numJoueur = numJoueur;
 	}
@@ -53,10 +53,10 @@ public class Joueur {
 	 * @return le guerrier num�ro i du joueur
 	 */
 	public Guerrier getGuerrier(int numGuerrier) {
-		if(numGuerrier>0 && numGuerrier<guerriers.length) {
-			return guerriers[numGuerrier];
+		if(numGuerrier<0 || numGuerrier>guerriers.length) {
+			return null;
 		}
-		return null;
+		return guerriers[numGuerrier-1];
 	}
 	
 	/** 
@@ -65,7 +65,7 @@ public class Joueur {
 	 */
 	public int nombreDeGuerriersEnVie() {
 		int count=0;
-		for(int i=1;i<guerriers.length;i++) {
+		for(int i=0;i<guerriers.length;i++) {
 			if(guerriers[i].getPtsVie()>0) {
 				count++;
 			}

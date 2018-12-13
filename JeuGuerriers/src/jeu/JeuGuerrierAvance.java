@@ -4,7 +4,7 @@ import java.util.Scanner;
 import java.util.ArrayList;
 
 /**
- * @author Lecharlier Loic
+ * @author Kambayi Dimitri
  * 		   Krasowski Marcin
  * 
  *         Classe d'exï¿½cution du jeu
@@ -95,6 +95,18 @@ public class JeuGuerrierAvance {
 		
 	}
 	
+	/*
+	 * vérifie si le pion joué appartient au joueur; 
+	 * si oui : on va plus loin dans les règles du jeu
+	 * sinon : c'est un tour perdu
+	 * 
+	 * @param joueur : numéro du joueur ayant joyé son tour
+	 * @param caseSelect : case sélectionnée
+	 * @param jetDe : la valeur du jet de dé qui a été effectué
+	 * @param nbrCases : nombre de cases du plateau
+	 * 
+	 * @return numéro du scénario qui s'est déroulé
+	 */
 	private static int checkGuerrierJoueur(int joueur, int caseSelect, int jetDe, int nbrCases) {
 		int returnVal=0;
 		Joueur player = grille.donnerJoueur(joueur);
@@ -110,6 +122,17 @@ public class JeuGuerrierAvance {
 		return returnVal;
 	}
 	
+	/*
+	 * 2ème étape pour les règles : va bouger le pion si la case est vide et incrémenter le nombre de tours du pion si nécessaire
+	 * sinon va appeler la 3ème méthode qui gère les règles 
+	 * 
+	 * @param joueur : numéro du joueur ayant joyé son tour
+	 * @param caseSelect : case sélectionnée
+	 * @param jetDe : la valeur du jet de dé qui a été effectué
+	 * @param nbrCases : nombre de cases du plateau
+	 * 
+	 * @return numéro du scénario qui s'est déroulé 
+	 */
 	private static int generalLogic(int caseSelect, int jetDe, int nbrCases) {
 		int returnVal=0;
 		int caseArrivee=caseSelect+jetDe;
@@ -134,6 +157,17 @@ public class JeuGuerrierAvance {
 		return returnVal;
 	}
 	
+	/*
+	 * Méthode qui gère les différents cas pour la bataille entre guerriers 
+	 * 
+	 * @param pionDeplace 
+	 * @param pionArrivee
+	 * @param caseDepart
+	 * @param caseArrivee
+	 * @param crossedFinish : est-ce qu'on a déjà franchi l'arrivée entre caseDepart et caseArrivee
+	 * 
+	 * @return numéro du scénario qui s'est déroulé
+	 */
 	private static int fight(Guerrier pionDeplace, Guerrier pionArrivee, int caseDepart, int caseArrivee, boolean crossedFinish) {
 		int returnVal=0;
 		int degatsPion1 = de.lancer();
@@ -185,6 +219,13 @@ public class JeuGuerrierAvance {
 		return returnVal;
 	}
 	
+	/*
+	 * Méthode qui vérifie si une des conditions pour la fin du jeu est atteinte
+	 * 
+	 * @param nbTours
+	 * @param nbJoueurs
+	 * @param tableauClasse : tableau classé des guerriers encore en jeu
+	 */
 	private static Joueur checkWin(int nbTours, int nbJoueurs, Guerrier[] tableauClasse) {
 		int joueursPionsEnVie = 0;
 		int joueurEnVie = 0;
@@ -204,6 +245,13 @@ public class JeuGuerrierAvance {
 		return null;
 	}
 	
+	/*
+	 * Renvoie un tableau contenant l'index d'un joueur s'il est en vie, -1 sinon
+	 * 
+	 * @param nbJoueurs
+	 * 
+	 * @return tableau int
+	 */
 	private static int[] eliminatePlayers(int nbJoueurs) {
 		int[] buffer = new int[nbJoueurs];
 		for(int i=1;i<nbJoueurs+1;i++) {

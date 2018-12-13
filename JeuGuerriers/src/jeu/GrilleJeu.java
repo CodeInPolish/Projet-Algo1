@@ -1,11 +1,11 @@
 package jeu;
 
 /**
- * @author Lecharlier Loï¿½c
+ * @author Kambayi Dimitri 
  * 		   Krasowski Marcin
  * 		   
  * 
- * Classe reprï¿½sentant l'ï¿½tat du jeu des guerriers
+ * Classe représentant l'état du jeu des guerriers
  * 
  */
 
@@ -13,32 +13,32 @@ public class GrilleJeu {
 
 	private Joueur[] tableJoueurs; //tableau des joueurs
 	private Guerrier[] cases; //cases du jeu
-	private int nombreDeTours; //nombre de tours ï¿½ faire pour gagner
+	private int nombreDeTours; //nombre de tours à faire pour gagner
 	
 	/**
 	 * initialise et construit la table des joueurs
-	 * initialise et construit la table reprï¿½sentant les cases du jeu
-	 * initialise le nombre de tour ï¿½ faire pour gagner
+	 * initialise et construit la table représentant les cases du jeu
+	 * initialise le nombre de tour à faire pour gagner
 	 * 
 	 * @param nombreJoueurs : le nombre de joueurs participants
 	 * @param nombreDeCases : le nombre de cases du plateau de jeu
 	 * @param nombreDeGuerriersParJoueur : le nombre de guerriers par joueurs
-	 * @param nombreDeTours : le nombre de tours ï¿½ effectuer pour gagner
-	 * @param ptsVieDeDepart : le nombre de points de vie de dï¿½part des guerriers
+	 * @param nombreDeTours : le nombre de tours à effectuer pour gagner
+	 * @param ptsVieDeDepart : le nombre de points de vie de départ des guerriers
 	 * @param nomDesJoueurs : tableau contenant le nom des joueurs
 	 * 
 	 */
 	
 	public GrilleJeu(int nombreJoueurs, int nombreDeCases, int nombreDeGuerriersParJoueur, int nombreDeTours,int ptsVieDeDepart,String[] nomDesJoueurs) {
-		tableJoueurs = new Joueur[nombreJoueurs+1];
-		for(int i=1;i<nombreJoueurs+1;i++) {
-			tableJoueurs[i] = new Joueur(nomDesJoueurs[i-1],nombreDeGuerriersParJoueur,ptsVieDeDepart,i);
+		tableJoueurs = new Joueur[nombreJoueurs];
+		for(int i=0;i<nombreJoueurs;i++) {
+			tableJoueurs[i] = new Joueur(nomDesJoueurs[i],nombreDeGuerriersParJoueur,ptsVieDeDepart,i+1);
 		}
-		cases = new Guerrier[nombreDeCases+1];
-		int index=1;
-		for(int i=1;i<nombreDeGuerriersParJoueur+1;i++) {
-			for(int j=1;j<nombreJoueurs+1;j++) {
-				cases[index] = tableJoueurs[j].getGuerrier(i);
+		cases = new Guerrier[nombreDeCases];
+		int index=0;
+		for(int i=0;i<nombreDeGuerriersParJoueur;i++) {
+			for(int j=0;j<nombreJoueurs;j++) {
+				cases[index] = tableJoueurs[j].getGuerrier(i+1);
 				index++;
 			}
 		}
@@ -57,18 +57,18 @@ public class GrilleJeu {
 			throw new IllegalArgumentException();
 		}
 		
-		return tableJoueurs[numJoueur];
+		return tableJoueurs[numJoueur-1];
 	}
 
 	/**
-	 * Renvoie le guerrier se trouvant ï¿½ la case dont le numï¿½ro est numCase
-	 * @param numCase : le numï¿½ro de la case
-	 * @return le guerrier se trouvant ï¿½ la case dont le numï¿½ro est numCase s'il y en a un
+	 * Renvoie le guerrier se trouvant à la case dont le numéro est numCase
+	 * @param numCase : le numéro de la case
+	 * @return le guerrier se trouvant à la case dont le numéro est numCase s'il y en a un
 	 *         null sinon
 	 */
 	public Guerrier donnerPion(int numCase) {
 		if(numCase>0 && numCase<cases.length) {
-			return cases[numCase];
+			return cases[numCase-1];
 		}
 		
 		return null;
@@ -76,29 +76,34 @@ public class GrilleJeu {
 
 	
 	/**
-	 * Bouge le guerrier se trouvant ï¿½ la case numï¿½ro caseDepart et le met ï¿½ la case numï¿½ro caseArrivï¿½e
+	 * Bouge le guerrier se trouvant à la case numéro caseDepart et le met à la case numéro caseArrivée
 	 * 
-	 * @param caseDepart : numï¿½ro de la case oï¿½ se trouve le guerrier ï¿½ bouger
-	 * @param caseArrivee : numï¿½ro de la case oï¿½ il faut mettre le guerrier
+	 * @param caseDepart : numéro de la case où se trouve le guerrier à bouger
+	 * @param caseArrivee : numéro de la case où il faut mettre le guerrier
 	 *
 	 */
 	
 	public void bougerPion(int caseDepart, int caseArrivee) {
-		cases[caseArrivee] = cases[caseDepart];
-		cases[caseDepart]=null;
+		cases[caseArrivee-1] = cases[caseDepart-1];
+		cases[caseDepart-1]=null;
 	}
 	
-	
+	/*
+	 * push un pion à la case numéro 'location'
+	 * 
+	 * @param elem : l'élément à placer 
+	 * @param location : numéro de la case
+	 */
 	public void pushPion(Guerrier elem, int location) {
-		cases[location] = elem;
+		cases[location-1] = elem;
 	}
 	
 	/**
-	 * Dï¿½termine si le guerrier se trouvant sur la case numï¿½ro numCase appartient au joueur joueur
+	 * Détermine si le guerrier se trouvant sur la case numéro numCase appartient au joueur joueur
 	 * 
-	 * @param numCase : numï¿½ro de la case
+	 * @param numCase : numéro de la case
 	 * @param joueur : le joueur
-	 * @return true  si le guerrier se trouvant ï¿½ la case numï¿½ro numCase appartient au joueur Joueur
+	 * @return true  si le guerrier se trouvant à la case numéro numCase appartient au joueur Joueur
 	 *         false sinon
 	 */
 	public boolean estUnPionDuJoueur(int numCase, Joueur joueur) {
@@ -116,26 +121,26 @@ public class GrilleJeu {
 	}
 	
 	/**
-	 * supprime le guerrier se trouvant ï¿½ la case numï¿½ro numCase (vide la case)
-	 * @param numCase : numï¿½ro de la case
+	 * supprime le guerrier se trouvant à la case numéro numCase (vide la case)
+	 * @param numCase : numéro de la case
 	 */
 	
 	public void supprimerPion(int numCase) {
-		cases[numCase] = null;
+		cases[numCase-1] = null;
 	}
 	
 	/**
-	 * Classe les guerriers encore un jeu d'abord selon le nombre tour dï¿½jï¿½ effectuï¿½ (du plus grand au plus petit) et ensuite (si dans le mï¿½me tour) par numï¿½ro de case occupï¿½e (du plus grand au plus petit)  
-	 * @return un tableau de pion reprï¿½sentant le classement des pions selon les critï¿½res ci-dessus
+	 * Classe les guerriers encore un jeu d'abord selon le nombre tour déjà effectué (du plus grand au plus petit) et ensuite (si dans le même tour) par numéro de case occupée (du plus grand au plus petit)  
+	 * @return un tableau de pion représentant le classement des pions selon les critères ci-dessus
 	 */
 	public Guerrier[] classerGuerriers() {
 		int guerriersEnVie = 0;
-		for(int i=1;i<tableJoueurs.length;i++) {
+		for(int i=0;i<tableJoueurs.length;i++) {
 			guerriersEnVie += tableJoueurs[i].nombreDeGuerriersEnVie();
 		}
 		Guerrier[] buffer = new Guerrier[guerriersEnVie];
 		int add_no=0;
-		for(int i=1;i<cases.length;i++) {
+		for(int i=0;i<cases.length;i++) {
 			Guerrier elem = donnerPion(i);
 			if(elem!=null && elem.getPtsVie()>0) {
 				int j=0;
@@ -155,16 +160,22 @@ public class GrilleJeu {
 		return buffer;
 	}
 	
+	/*
+	 * algorithme de recherche de case libre à partir de la case start(compris)
+	 * 
+	 * @param start : case de départ de la recherche
+	 */
+	
 	public int donnerCaseVide(int start) {
 		for(int i=start;i<cases.length;i++) {
 			if(cases[i]==null) {
-				return i;
+				return i+1;
 			}
 		}
 		
-		for(int i=1;i<start;i++) {
+		for(int i=0;i<start;i++) {
 			if(cases[i]==null) {
-				return i;
+				return i+1;
 			}
 		}
 		
