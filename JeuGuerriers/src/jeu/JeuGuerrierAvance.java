@@ -67,10 +67,11 @@ public class JeuGuerrierAvance {
 				int jetDe = de.lancer();
 				plateau.afficherResultatDe(jetDe);
 				int choix = plateau.jouer();			
-				int scenario = checkGuerrierJoueur(playersInGame[playerIndex], choix, jetDe, nbrCases);
+				int outcome = checkGuerrierJoueur(playersInGame[playerIndex], choix, jetDe, nbrCases);
 				
-				if(scenario==4) {
-					playerIndex--;
+				switch(outcome) {
+					case 5: {playerIndex--;}break;
+					default: break;
 				}
 				
 			}
@@ -79,6 +80,7 @@ public class JeuGuerrierAvance {
 			Guerrier[] classementGuerrier = grille.classerGuerriers();
 			plateau.afficherGuerriers(classementGuerrier);
 			winner = checkWin(nbrTours, nbreJoueurs, classementGuerrier);
+			playersInGame = eliminatePlayers(nbreJoueurs);
 			
 			do{
 				playerIndex++;
@@ -123,6 +125,7 @@ public class JeuGuerrierAvance {
 				grille.donnerPion(caseSelect).ajouterUnTour();
 			}
 			grille.bougerPion(caseSelect, caseArrivee);
+			returnVal=1;
 		}
 		else{
 			returnVal=fight(pionDeplace, pionArrivee, caseSelect, caseArrivee, crossedFinish);
@@ -143,12 +146,12 @@ public class JeuGuerrierAvance {
 			grille.supprimerPion(caseDepart);
 			grille.supprimerPion(caseArrivee);
 			plateau.afficherInformation2("Les deux guerriers sont morts!");
-			returnVal=1;
+			returnVal=2;
 		}
 		else if(pionDeplace.getPtsVie() <= 0) {
 			grille.supprimerPion(caseDepart);
 			plateau.afficherInformation2("Votre guerrier est mort!");
-			returnVal=2;
+			returnVal=3;
 		}
 		else if(pionArrivee.getPtsVie() <= 0) {					
 			if(crossedFinish) {
@@ -158,11 +161,11 @@ public class JeuGuerrierAvance {
 			grille.pushPion(pionDeplace,caseArrivee);
 			grille.supprimerPion(caseDepart);
 			plateau.afficherInformation2("Le guerrier attaqué est mort!");
-			returnVal=3;
+			returnVal=4;
 		}
 		else if(degatsPion1>degatsPion2) {
 			plateau.afficherInformation2("Votre guerrier a gagné la bataille!");
-			returnVal=4;
+			returnVal=5;
 			grille.supprimerPion(caseDepart);
 			int arrivee=grille.donnerCaseVide(caseArrivee);
 			
@@ -177,7 +180,7 @@ public class JeuGuerrierAvance {
 		}
 		else {
 			plateau.afficherInformation2("Le guerrier a infligé: "+degatsPion1+" et a subi: "+degatsPion2);
-			returnVal=5;
+			returnVal=6;
 		}
 		return returnVal;
 	}
@@ -199,6 +202,18 @@ public class JeuGuerrierAvance {
 			return grille.donnerJoueur(tableauClasse[0].getNumJoueur());
 		}
 		return null;
+	}
+	
+	private static int[] eliminatePlayers(int nbJoueurs) {
+		int[] buffer = new int[nbJoueurs];
+		for(int i=1;i<nbJoueurs+1;i++) {
+			if(grille.donnerJoueur(i).nombreDeGuerriersEnVie()>0) {
+				buffer[i-1]=i;
+			}else {
+				buffer[i-1]=-1;
+			}
+		}
+		return buffer;
 	}
 
 }
