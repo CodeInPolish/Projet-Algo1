@@ -75,6 +75,7 @@ public class JeuGuerrier {
 			Guerrier[] classementGuerrier = grille.classerGuerriers();
 			plateau.afficherGuerriers(classementGuerrier);
 			winner = checkWin(nbrTours, nbreJoueurs, classementGuerrier);
+			playersInGame = eliminatePlayers(nbreJoueurs);
 			
 			do{
 				playerIndex++;
@@ -187,6 +188,18 @@ public class JeuGuerrier {
 			return grille.donnerJoueur(tableauClasse[0].getNumJoueur());
 		}
 		return null;
+	}
+	
+	private static int[] eliminatePlayers(int nbJoueurs) {
+		int[] buffer = new int[nbJoueurs];
+		for(int i=1;i<nbJoueurs+1;i++) {
+			if(grille.donnerJoueur(i).nombreDeGuerriersEnVie()>0) {
+				buffer[i-1]=i;
+			}else {
+				buffer[i-1]=-1;
+			}
+		}
+		return buffer;
 	}
 
 }
